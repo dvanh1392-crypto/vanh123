@@ -15,7 +15,28 @@ const points=cards=>cards.reduce((a,c)=>a+val(c),0)%10;
 const power=c=>c.n===1?14:c.n===2?15:c.n;
 const label=c=>(c.n===1?'A':c.n===11?'J':c.n===12?'Q':c.n===13?'K':c.n)+c.s;
 function baccarat(d){const p=[d.pop(),d.pop()],b=[d.pop(),d.pop()];let pt=points(p),bt=points(b);if(pt<8&&bt<8){let third=null;if(pt<=5){third=d.pop();p.push(third);}if(!third){if(bt<=5)b.push(d.pop());}else{const t=val(third);if(bt<=2||(bt===3&&t!==8)||(bt===4&&t>=2&&t<=7)||(bt===5&&t>=4&&t<=7)||(bt===6&&(t===6||t===7)))b.push(d.pop());}}pt=points(p);bt=points(b);return {player:p,banker:b,playerScore:pt,bankerScore:bt,winner:pt===bt?'tie':pt>bt?'player':'banker'};}
-function pattern(cards){if(!cards.length)return null;const cs=[...cards].sort((a,b)=>power(a)-power(b));const nums=cs.map(power),same=nums.every(n=>n===nums[0]);if(cards.length===1)return {kind:'single',high:nums[0],len:1};if(cards.length===2&&same)return {kind:'pair',high:nums[0],len:2};if(cards.length===3&&same)return {kind:'triple',high:nums[0],len:3};if(cards.length===4&&same)return {kind:'quad',high:nums[0],len:4};if(cards.length>=3&&!nums.includes(15)&&nums.every((n,i)=>i===0||n===nums[i-1]+1))return {kind:'straight',high:nums.at(-1),len:nums.length};return null;}
+// Quy tac sanh tuy chinh: A-2-3-... duoc chap nhan; 2 khong nam giua/cuoi sanh.
+function pattern(cards) {
+ if (!Array.isArray(cards) || !cards.length) return null;
+ const nums=cards.map(power).sort((a,b)=>a-b);
+ const same=nums.every(n=>n===nums[0]);
+ if(cards.length===1)return {kind:'single',high:nums[0],len:1};
+ if(cards.length===2&&same)return {kind:'pair',high:nums[0],len:2};
+ if(cards.length===3&&same)return {kind:'triple',high:nums[0],len:3};
+ if(cards.length===4&&same)return {kind:'quad',high:nums[0],len:4};
+ if(cards.length<3 || new Set(nums).size!==nums.length)return null;
+ // Sanh thuong 3-4-5-...-K-A (khong co 2).
+ if(!nums.includes(15) && nums.every((n,i)=>i===0||n===nums[i-1]+1))
+   return {kind:'straight',high:nums.at(-1),len:nums.length};
+ // Sanh dac biet A-2-3-4-... : bat buoc co A, 2 va 3.
+ // Trong du lieu: A=14, 2=15, 3=3 ... K=13.
+ if(nums.includes(14)&&nums.includes(15)){
+   const low=nums.filter(n=>n!==14&&n!==15);
+   if(low.length && low[0]===3 && low.every((n,i)=>n===i+3))
+     return {kind:'straight',high:low.at(-1),len:nums.length};
+ }
+ return null;
+}
 function beats(next,prev){if(!prev)return true;if(next.kind==='quad'&&prev.kind==='single'&&prev.high===15)return true;return next.kind===prev.kind&&next.len===prev.len&&next.high>prev.high;}
 function publicState(r,viewer){const p=r.players.find(x=>x.id===viewer);return {code:r.code,game:r.game,capacity:r.capacity,host:r.host,phase:r.phase,round:r.round,players:r.players.map(x=>({id:x.id,name:x.name,ready:x.ready,balance:x.balance,count:x.hand.length,choice:r.phase==='result'?x.choice:undefined})),you:viewer,hand:p?.hand||[],choice:p?.choice||null,result:r.result,turn:r.turn,lead:r.lead,table:r.table,passed:r.passed,announced:r.announced,notice:r.notice,starting:r.starting};}
 function emit(r){r.players.forEach(p=>io.to(p.id).emit('state',publicState(r,p.id)));}

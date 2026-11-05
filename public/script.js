@@ -1,5 +1,14 @@
 'use strict';
-const socket=io();
+const socket = typeof window.io === 'function' ? window.io() : null;
+if (!socket) {
+  window.addEventListener('DOMContentLoaded', () => {
+    const alert = document.createElement('div');
+    alert.className = 'server-alert';
+    alert.textContent = 'Không kết nối được máy chủ Socket.IO. Hãy chạy npm start và mở http://localhost:3000, hoặc triển khai trên Render bằng Web Service (không dùng Static Site).';
+    document.body.prepend(alert);
+  });
+}
+
 const $=id=>document.getElementById(id);
 let game='baccarat',state=null,selected=new Set(),language='vi';
 const dict={vi:{welcome:'CHƠI BÀI CÙNG BẠN BÈ',heading:'Chọn trò chơi của bạn',virtual:'Chỉ dùng điểm VND ảo, không có nạp hoặc rút tiền thật.',name:'Tên của bạn',capacity:'Số người trong phòng',create:'Tạo phòng mới',join:'Vào phòng',room:'Phòng',leave:'Thoát phòng',copy:'Sao chép link mời'},zh:{welcome:'和朋友一起玩纸牌',heading:'选择游戏',virtual:'仅使用虚拟越南盾积分，不支持真实充值或提现。',name:'你的昵称',capacity:'房间人数',create:'创建房间',join:'加入房间',room:'房间',leave:'退出房间',copy:'复制邀请链接'}};
@@ -27,11 +36,11 @@ function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':
 function enter(code){history.replaceState(null,'',`?room=${encodeURIComponent(code)}`);selected.clear();}
 function name(){const n=$('name').value.trim();if(n)localStorage.setItem('cardroom-name',n);return n;}
 function callback(res){if(res?.error)return toast(res.error);if(res?.code)enter(res.code);}
-$('create').onclick=()=>{if(!name())return toast('Hãy nhập tên.');socket.emit('create',{name:name(),capacity:Number($('capacity').value),game},callback);};
-$('join').onclick=()=>{if(!name())return toast('Hãy nhập tên.');const code=$('joinCode').value.trim().toUpperCase();if(!code)return toast('Hãy nhập mã phòng.');socket.emit('join',{name:name(),code},callback);};
+$('create').onclick=()=>{if(!name())return toast('Hãy nhập tên.');if(!socket)return toast('Chưa kết nối máy chủ. Hãy mở game từ Web Service.');socket.emit('create',{name:name(),capacity:Number($('capacity').value),game},callback);};
+$('join').onclick=()=>{if(!name())return toast('Hãy nhập tên.');const code=$('joinCode').value.trim().toUpperCase();if(!code)return toast('Hãy nhập mã phòng.');if(!socket)return toast('Chưa kết nối máy chủ. Hãy mở game từ Web Service.');socket.emit('join',{name:name(),code},callback);};
 $('leave').onclick=()=>{socket.emit('leave');state=null;selected.clear();history.replaceState(null,'',location.pathname);showRoom(false);};
 $('copy').onclick=async()=>{const url=location.origin+location.pathname+'?room='+state.code;try{await navigator.clipboard.writeText(url);toast('Đã sao chép link mời.');}catch{prompt('Sao chép link:',url);}};
 $('lang').onclick=()=>{language=language==='vi'?'zh':'vi';document.querySelectorAll('[data-i]').forEach(el=>el.textContent=dict[language][el.dataset.i]);};
 document.querySelectorAll('.game').forEach(el=>el.onclick=()=>{game=el.dataset.game;document.querySelectorAll('.game').forEach(e=>e.classList.toggle('selected',e===el));});
-socket.on('state',s=>{if(!state||state.round!==s.round||state.phase!==s.phase||state.turn!==s.turn)selected.clear();state=s;render();});socket.on('errorMessage',toast);socket.on('disconnect',()=>toast('Mất kết nối máy chủ. Tải lại trang để vào phòng mới.'));
+socket?.on('state',s=>{if(!state||state.round!==s.round||state.phase!==s.phase||state.turn!==s.turn)selected.clear();state=s;render();});socket?.on('errorMessage',toast);socket?.on('disconnect',()=>toast('Mất kết nối máy chủ. Tải lại trang để vào phòng mới.'));
 $('name').value=localStorage.getItem('cardroom-name')||'';const invite=new URLSearchParams(location.search).get('room');if(invite){$('joinCode').value=invite.toUpperCase();toast('Đã điền mã phòng. Nhập tên rồi bấm Vào phòng.');}
