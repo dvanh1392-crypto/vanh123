@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Baccarat Online</title>
+    <style>
+        :root {
+            font-family: system-ui, Arial, sans-serif;
+            color: #f8f4e9;
+            background: #071b19
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(ellipse at 50% 0%, #174a3c, #071b19 70%)
+        }
+
+        main {
+            max-width: 900px;
+            margin: auto;
+            padding: 24px 16px
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px
+        }
+
+        .brand {
+            font-size: 24px;
+            color: #f5d68a;
+            font-weight: 800
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+            border-radius: 10px;
+            padding: 12px
+        }
+
+        button {
+            cursor: pointer;
+            border: 1px solid #c9a354;
+            background: #c9a354;
+            color: #12251d;
+            font-weight: 750
+        }
+
+        button:disabled {
+            opacity: .4;
+            cursor: not-allowed
+        }
+
+        button.secondary {
+            background: transparent;
+            color: #f5d68a
+        }
+
+        input,
+        select {
+            background: #102d28;
+            border: 1px solid #52776a;
+            color: white;
+            max-width: 100%
+        }
+
+        .panel {
+            border: 1px solid #5b6850;
+            border-radius: 20px;
+            background: #0b2924ed;
+            padding: 24px;
+            margin-top: 22px;
+            box-shadow: 0 15px 45px #0005
+        }
+
+        .center {
+            text-align: center
+        }
+
+        .hero {
+            font-size: clamp(32px, 6vw, 56px);
+            margin: 16px 0 6px;
+            color: #f5d68a
+        }
+
+        .muted {
+            color: #a7c0b5
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center
+        }
+
+        .row>* {
+            flex: 1
+        }
+
+        .stack {
+            display: grid;
+            gap: 12px;
+            max-width: 460px;
+            margin: 24px auto
+        }
+
+        .hide {
+            display: none !important
+        }
+
+        .players {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+            gap: 12px
+        }
+
+        .player {
+            padding: 14px;
+            background: #174137;
+            border: 1px solid #376e59;
+            border-radius: 12px
+        }
+
+        .me {
+            border-color: #f5d68a
+        }
+
+        .tag {
+            color: #f5d68a;
+            font-size: 13px
+        }
+
+        .choices {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 18px 0
+        }
+
+        .choices button {
+            min-height: 90px;
+            font-size: 19px
+        }
+
+        .cards {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .card {
+            width: 57px;
+            height: 82px;
+            background: #fff9ec;
+            border-radius: 8px;
+            color: #b42f2f;
+            display: grid;
+            place-items: center;
+            font-size: 25px;
+            font-weight: bold;
+            box-shadow: 0 3px 7px #0007
+        }
+
+        .table {
+            border: 4px solid #a98a48;
+            border-radius: 100px;
+            background: radial-gradient(#22765b, #0d4939);
+            padding: 22px 10px;
+            margin: 20px 0
+        }
+
+        .score {
+            font-size: 25px;
+            color: #ffe39b
+        }
+
+        .notice {
+            padding: 12px;
+            background: #29433a;
+            border-radius: 10px;
+            margin: 14px 0
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px
+        }
+
+        #toast {
+            position: fixed;
+            bottom: 22px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #7b3030;
+            padding: 12px 20px;
+            border-radius: 10px;
+            display: none;
+            z-index: 5
+        }
+
+        @media(max-width:520px) {
+            .choices button {
+                font-size: 15px;
+                padding: 8px
+            }
+
+            .panel {
+                padding: 16px
+            }
+
+            .table {
+                border-radius: 50px
+            }
+
+            .card {
+                width: 45px;
+                height: 65px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <header>
+            <div class="brand">♠ BACCARAT <small>ONLINE</small></div><select id="lang">
+                <option value="vi">Tiếng Việt</option>
+                <option value="zh">简体中文</option>
+            </select>
+        </header>
+        <section id="home" class="panel center">
+            <div class="hero">♠ BACCARAT ♠</div>
+            <p class="muted" data-t="subtitle">Chơi cùng bạn bè · 2–4 người · Không giới hạn lượt</p>
+            <div class="stack"><input id="name" maxlength="24" placeholder="Tên của bạn"><select id="capacity">
+                    <option value="2">2 người</option>
+                    <option value="3">3 người</option>
+                    <option value="4">4 người</option>
+                </select><button id="create" data-t="create">Tạo phòng mới</button>
+                <div class="muted" data-t="or">HOẶC</div><input id="code" maxlength="6" placeholder="Mã phòng"><button
+                    id="join" class="secondary" data-t="join">Vào phòng</button>
+            </div>
+            <p class="muted" data-t="virtual">500 VND là điểm thưởng ảo, không thể rút tiền.</p>
+        </section>
+        <section id="room" class="hide">
+            <div class="panel">
+                <div class="topbar">
+                    <div>
+                        <div class="muted" data-t="room">Mã phòng</div>
+                        <h2 id="roomCode"></h2>
+                    </div>
+                    <div class="row" style="flex:0 1 auto"><button id="copy" class="secondary" data-t="copy">Sao chép
+                            link</button><button id="leave" class="secondary" data-t="leave">Thoát phòng</button></div>
+                </div>
+                <p id="status" class="notice"></p>
+                <div id="players" class="players"></div>
+            </div>
+            <div id="lobby" class="panel center">
+                <h2 data-t="waiting">Phòng chờ</h2>
+                <p class="muted" data-t="readyHint">Phòng đủ người và tất cả sẵn sàng sẽ tự bắt đầu.</p><button
+                    id="ready" data-t="ready">Sẵn sàng</button>
+            </div>
+            <div id="betting" class="panel center hide">
+                <h2 data-t="choose">Chọn bên bạn dự đoán sẽ thắng</h2>
+                <p class="muted" data-t="chooseHint">Mỗi người chọn một bên. Chọn đúng được +500 VND ảo.</p>
+                <div class="choices"><button data-choice="banker">庄<br>Banker</button><button
+                        data-choice="player">闲<br>Player</button><button data-choice="tie">和<br>Tie</button></div>
+                <p id="chosen" class="muted"></p>
+            </div>
+            <div id="result" class="panel center hide">
+                <h2 data-t="result">Kết quả ván</h2>
+                <div class="table">
+                    <h3>闲 · Player <span class="score" id="ps"></span></h3>
+                    <div class="cards" id="pc"></div>
+                    <hr style="border:0;border-top:1px solid #ffffff44;margin:25px 10%">
+                    <h3>庄 · Banker <span class="score" id="bs"></span></h3>
+                    <div class="cards" id="bc"></div>
+                </div>
+                <h2 id="winner"></h2>
+                <p id="myResult"></p><button id="next" data-t="next">Ván tiếp theo</button>
+                <p id="nextHint" class="muted"></p>
+            </div>
+        </section>
+    </main>
+    <div id="toast"></div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io(); let state = null, myCode = null; const $ = id => document.getElementById(id); const dict = { vi: { subtitle: 'Chơi cùng bạn bè · 2–4 người · Không giới hạn lượt', create: 'Tạo phòng mới', or: 'HOẶC', join: 'Vào phòng', virtual: '500 VND là điểm thưởng ảo, không thể rút tiền.', room: 'Mã phòng', copy: 'Sao chép link', leave: 'Thoát phòng', waiting: 'Phòng chờ', readyHint: 'Phòng đủ người và tất cả sẵn sàng sẽ tự bắt đầu.', ready: 'Sẵn sàng', unready: 'Hủy sẵn sàng', choose: 'Chọn bên bạn dự đoán sẽ thắng', chooseHint: 'Mỗi người chọn một bên. Chọn đúng được +500 VND ảo.', result: 'Kết quả ván', next: 'Ván tiếp theo', name: 'Tên của bạn', code: 'Mã phòng', players: 'người', round: 'Ván', readyStatus: 'Sẵn sàng', waitingStatus: 'Chưa sẵn sàng', betting: 'Đang chọn cược', selected: 'Đã chọn', winner: 'Thắng', tie: 'Hòa', correct: 'Bạn đoán đúng! +500 VND', wrong: 'Bạn chưa đoán đúng ván này.', host: 'Chủ phòng', waitHost: 'Đợi chủ phòng mở ván tiếp theo', waitPlayers: 'Đợi đủ người và sẵn sàng', copied: 'Đã sao chép link phòng', balance: 'Tổng thưởng', needName: 'Hãy nhập tên của bạn', disconnected: 'Mất kết nối với máy chủ' }, zh: { subtitle: '好友联机 · 2–4人 · 无限回合', create: '创建房间', or: '或者', join: '加入房间', virtual: '500越南盾仅为虚拟积分，不可提现。', room: '房间号', copy: '复制邀请链接', leave: '退出房间', waiting: '等待大厅', readyHint: '人数满且全部准备后自动开始。', ready: '准备', unready: '取消准备', choose: '请选择你预测获胜的一方', chooseHint: '每人选择一方，猜中获得500虚拟越南盾。', result: '本局结果', next: '下一局', name: '你的名字', code: '房间号', players: '人', round: '第', readyStatus: '已准备', waitingStatus: '未准备', betting: '正在下注', selected: '已选择', winner: '获胜', tie: '和局', correct: '猜对了！+500越南盾', wrong: '本局未猜中。', host: '房主', waitHost: '等待房主开启下一局', waitPlayers: '等待玩家准备', copied: '已复制邀请链接', balance: '累计奖励', needName: '请输入名字', disconnected: '与服务器断开连接' } }; let lang = 'vi'; const t = k => dict[lang][k] || k;
+        function translate() { document.querySelectorAll('[data-t]').forEach(e => e.textContent = t(e.dataset.t)); $('name').placeholder = t('name'); $('code').placeholder = t('code'); render(); } $('lang').onchange = e => { lang = e.target.value; translate(); };
+        function toast(s) { const e = $('toast'); e.textContent = s; e.style.display = 'block'; setTimeout(() => e.style.display = 'none', 3000) }
+        function name() { const n = $('name').value.trim(); if (!n) toast(t('needName')); return n; }
+        function enter(code) { myCode = code; history.replaceState(null, '', location.pathname + '?room=' + code); $('home').classList.add('hide'); $('room').classList.remove('hide'); }
+        function goHome() { myCode = null; state = null; history.replaceState(null, '', location.pathname); $('room').classList.add('hide'); $('home').classList.remove('hide'); }
+        $('create').onclick = () => { const n = name(); if (!n) return; socket.emit('create', { name: n, capacity: Number($('capacity').value) }, res => res.error ? toast(res.error) : enter(res.code)); };
+        $('join').onclick = () => { const n = name(); if (!n) return; socket.emit('join', { name: n, code: $('code').value }, res => res.error ? toast(res.error) : enter(res.code)); };
+        $('leave').onclick = () => { socket.emit('leave'); goHome(); }; $('ready').onclick = () => socket.emit('ready'); document.querySelectorAll('[data-choice]').forEach(b => b.onclick = () => socket.emit('bet', b.dataset.choice)); $('next').onclick = () => socket.emit('next');
+        $('copy').onclick = async () => { const url = location.origin + location.pathname + '?room=' + myCode; try { await navigator.clipboard.writeText(url); toast(t('copied')); } catch { prompt('Link:', url) } };
+        function render() {
+            if (!state) return; const s = state, me = s.players.find(p => p.id === socket.id); $('roomCode').textContent = s.code + ' · ' + s.players.length + '/' + s.capacity; $('status').textContent = (lang === 'zh' ? t('round') + s.round : t('round') + ' ' + s.round) + ' · ' + (s.phase === 'lobby' ? t('waitPlayers') : s.phase === 'betting' ? t('betting') : t('result'));
+            $('players').replaceChildren(...s.players.map(p => { let d = document.createElement('div'); d.className = 'player' + (p.id === socket.id ? ' me' : ''); let strong = document.createElement('strong'); strong.textContent = p.name + (p.id === s.host ? ' ★' : ''); let a = document.createElement('div'); a.className = 'tag'; a.textContent = (p.ready ? t('readyStatus') : t('waitingStatus')) + (s.phase === 'betting' && p.id === socket.id && p.choice ? ' · ' + t('selected') : ''); let b = document.createElement('div'); b.textContent = t('balance') + ': ' + p.balance.toLocaleString() + ' VND'; d.append(strong, a, b); return d; }));
+            for (const id of ['lobby', 'betting', 'result']) $(id).classList.toggle('hide', s.phase !== id); if (me) { $('ready').textContent = me.ready ? t('unready') : t('ready'); $('chosen').textContent = me.choice ? t('selected') + ': ' + ({ banker: '庄', player: '闲', tie: '和' }[me.choice]) : ''; document.querySelectorAll('[data-choice]').forEach(b => b.disabled = !!me.choice); }
+            if (s.result) { const r = s.result; const cards = (id, arr) => $(id).replaceChildren(...arr.map(c => { const el = document.createElement('div'); el.className = 'card'; el.textContent = c.label; return el; })); cards('pc', r.player); cards('bc', r.banker); $('ps').textContent = r.playerScore; $('bs').textContent = r.bankerScore; $('winner').textContent = ({ banker: '庄 Banker', player: '闲 Player', tie: '和 Tie' }[r.winner]) + ' · ' + t(r.winner === 'tie' ? 'tie' : 'winner'); $('myResult').textContent = me ? (me.choice === r.winner ? t('correct') : t('wrong')) : ''; $('next').classList.toggle('hide', s.host !== socket.id); $('nextHint').textContent = s.host === socket.id ? '' : t('waitHost'); }
+        }
+        socket.on('state', s => { state = s; if (!myCode && s.players.some(p => p.id === socket.id)) enter(s.code); render(); }); socket.on('disconnect', () => { if (myCode) { goHome(); toast(t('disconnected')); } }); const invite = new URLSearchParams(location.search).get('room'); if (invite) $('code').value = invite.toUpperCase(); translate();
+    </script>
+</body>
+
+</html>
